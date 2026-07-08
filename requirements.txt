@@ -1,0 +1,55 @@
+# Credit Risk LLM - Complete Requirements
+# Core Data Science
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+scipy==1.13.0
+imbalanced-learn==0.12.3
+
+# Classical ML (Tabular Branch)
+lightgbm==4.3.0
+xgboost==2.0.3
+catboost==1.2.5
+
+# Deep Learning / LLM
+torch==2.2.2
+transformers==4.40.2
+peft==0.11.1
+bitsandbytes==0.43.1
+accelerate==0.30.1
+trl==0.8.6
+datasets==2.19.1
+sentence-transformers==3.0.1
+
+# Explainability
+shap==0.45.0
+lime==0.2.0.1
+dice-ml==0.11
+captum==0.7.0
+
+# Fairness Audit
+aequitas==1.0.0
+fairlearn==0.10.0
+
+# API & Web (AWS Deployment)
+fastapi==0.111.0
+uvicorn==0.30.0
+pydantic==2.7.0
+python-multipart==0.0.9
+streamlit==1.35.0
+requests==2.31.0
+
+# Data & APIs
+kaggle==1.6.14
+
+# Visualization
+matplotlib==3.9.0
+seaborn==0.13.2
+plotly==5.22.0
+
+# Utils
+tqdm==4.66.4
+wandb==0.17.0
+jupyter==1.0.0
+ipywidgets==8.1.0
+python-dotenv==1.0.0
