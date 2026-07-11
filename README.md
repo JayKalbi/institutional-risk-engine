@@ -1,4 +1,16 @@
-# Institutional-Risk-Engine: Mistral-7B Fine-Tuned for Credit Default Prediction
+<div align="center">
+  <img src="figures/github_banner.jpg" alt="Institutional Risk Engine Banner" width="100%">
+
+  # Institutional-Risk-Engine
+  **Mistral-7B Fine-Tuned for Explainable Credit Default Prediction**
+
+  ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+  ![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
+  ![Mistral-7B](https://img.shields.io/badge/Model-Mistral--7B-purple)
+  ![Status: Active](https://img.shields.io/badge/Status-Active-success)
+</div>
+
+<br/>
 
 > A regulatory-compliant multimodal credit risk framework fusing QLoRA-adapted Mistral-7B with gradient boosting, featuring SHAP explainability, counterfactual reasoning, and ECOA fairness auditing.
 
@@ -51,11 +63,6 @@ institutional-risk-engine/
 |   |-- components.py
 |   |-- Dockerfile
 |
-
-|-- research-paper/            # LaTeX research paper
-|   |-- main.tex
-|   |-- references.bib
-|   |-- figures/
 |
 |-- data/
 |   |-- raw/                   # Downloaded datasets
@@ -144,22 +151,7 @@ The web interface will be available at `http://localhost:8501`.
 | Mistral-7B (text-only) | ~0.75 | ~0.50 | ~0.38 |
 | **Institutional-Risk-Engine (ours)** | **~0.84** | **~0.63** | **~0.50** |
 
----
 
-## Citation
-
-If you use this work, please cite:
-
-```bibtex
-@article{institutionalriskengine2025,
-  title={Institutional-Risk-Engine: A Regulatory-Compliant Multimodal Framework 
-         Fusing QLoRA-Adapted Mistral-7B with Gradient Boosting 
-         for Explainable Credit Default Prediction},
-  author={Jay Kalbi},
-  journal={arXiv preprint},
-  year={2025}
-}
-```
 
 ---
 
