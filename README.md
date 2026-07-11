@@ -13,7 +13,7 @@ This project implements **Institutional-Risk-Engine**, a hybrid AI architecture 
 - **Generates natural language rationales** for every prediction
 - **Provides SHAP explainability** + counterfactual explanations (EU AI Act compliant)
 - **Passes ECOA fairness audits** across demographic groups
-- **Deploys on AWS** via Docker with FastAPI + Streamlit frontend
+- **Deploys locally** via a lightweight Streamlit web interface
 
 ### Research Questions
 
@@ -45,22 +45,13 @@ institutional-risk-engine/
 |   |-- fairness.py
 |   |-- utils.py
 |
-|-- aws-api/                   # FastAPI inference service
-|   |-- main.py
-|   |-- model_loader.py
-|   |-- schemas.py
-|   |-- Dockerfile
-|
+
 |-- streamlit-app/             # Streamlit frontend
 |   |-- app.py
 |   |-- components.py
 |   |-- Dockerfile
 |
-|-- docker-config/             # Docker Compose & deployment
-|   |-- docker-compose.yml
-|   |-- nginx.conf
-|   |-- deploy.sh
-|
+
 |-- research-paper/            # LaTeX research paper
 |   |-- main.tex
 |   |-- references.bib
@@ -109,25 +100,22 @@ institutional-risk-engine/
 
 ---
 
-## AWS Deployment
+## Local Deployment (Streamlit)
 
 ### Prerequisites
 
-- AWS account with EC2 or ECS access
-- Docker installed locally
-- Trained model artifacts from Kaggle notebooks
+- Python 3.9+
+- Trained model artifacts downloaded from Kaggle (`output/models/`)
 
-### Deploy
+### Run Locally
 
 ```bash
-cd docker-config
-docker-compose up --build -d
+pip install -r requirements.txt
+cd streamlit-app
+streamlit run app.py
 ```
 
-Services:
-- **FastAPI** (port 8000): Model inference API
-- **Streamlit** (port 8501): Web UI
-- **Nginx** (port 80): Reverse proxy
+The web interface will be available at `http://localhost:8501`.
 
 ---
 
@@ -141,9 +129,8 @@ Services:
 | Fusion | Logistic Regression meta-learner |
 | Explainability | SHAP, DiCE-ML |
 | Fairness | Aequitas, Fairlearn |
-| API | FastAPI + Uvicorn |
 | Frontend | Streamlit |
-| Deployment | Docker + AWS EC2/ECS |
+| Deployment | Local Execution |
 
 ---
 
