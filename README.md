@@ -27,7 +27,7 @@ This project implements **Institutional-Risk-Engine**, a hybrid AI architecture 
 ## Folder Structure
 
 ```
-credit-risk-llm/
+institutional-risk-engine/
 |-- kaggle-notebooks/          # 7 Kaggle notebooks (run in order)
 |   |-- 01_data_download.ipynb
 |   |-- 02_eda.ipynb
@@ -168,7 +168,7 @@ If you use this work, please cite:
   title={Institutional-Risk-Engine: A Regulatory-Compliant Multimodal Framework 
          Fusing QLoRA-Adapted Mistral-7B with Gradient Boosting 
          for Explainable Credit Default Prediction},
-  author={[Your Name]},
+  author={Jay Kalbi},
   journal={arXiv preprint},
   year={2025}
 }
