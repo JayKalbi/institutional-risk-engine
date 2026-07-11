@@ -1,4 +1,4 @@
-# CreditRisk-LLM: Mistral-7B Fine-Tuned for Credit Default Prediction
+# Institutional-Risk-Engine: Mistral-7B Fine-Tuned for Credit Default Prediction
 
 > A regulatory-compliant multimodal credit risk framework fusing QLoRA-adapted Mistral-7B with gradient boosting, featuring SHAP explainability, counterfactual reasoning, and ECOA fairness auditing.
 
@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-This project implements **CreditRisk-LLM**, a hybrid AI architecture for credit default prediction that:
+This project implements **Institutional-Risk-Engine**, a hybrid AI architecture for credit default prediction that:
 
 - **Fine-tunes Mistral-7B-Instruct-v0.3** with QLoRA (4-bit quantization) on the HMDA mortgage dataset
 - **Fuses LLM text embeddings** with LightGBM tabular predictions via late-fusion meta-learning
@@ -155,7 +155,7 @@ Services:
 | XGBoost | ~0.78 | ~0.55 | ~0.42 |
 | LightGBM | ~0.80 | ~0.58 | ~0.45 |
 | Mistral-7B (text-only) | ~0.75 | ~0.50 | ~0.38 |
-| **HybridCredit-LLM (ours)** | **~0.84** | **~0.63** | **~0.50** |
+| **Institutional-Risk-Engine (ours)** | **~0.84** | **~0.63** | **~0.50** |
 
 ---
 
@@ -164,8 +164,8 @@ Services:
 If you use this work, please cite:
 
 ```bibtex
-@article{creditriskllm2025,
-  title={CreditRisk-LLM: A Regulatory-Compliant Multimodal Framework 
+@article{institutionalriskengine2025,
+  title={Institutional-Risk-Engine: A Regulatory-Compliant Multimodal Framework 
          Fusing QLoRA-Adapted Mistral-7B with Gradient Boosting 
          for Explainable Credit Default Prediction},
   author={[Your Name]},
