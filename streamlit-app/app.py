@@ -273,7 +273,7 @@ def preprocess_and_predict(data: dict):
 # SIDEBAR NAVIGATION
 # =============================================================================
 
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/182px-Python-logo-notext.svg.png", width=50)
+
 st.sidebar.markdown("## 🏦 HybridCredit-LLM")
 st.sidebar.markdown("<p style='color: #64748B; font-size: 0.9rem;'>Institutional Risk Engine v2.0</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
