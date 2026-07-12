@@ -313,14 +313,25 @@ if page == "🖥️ Live Underwriting Terminal":
     with col_input:
         st.markdown("### Applicant Parameters")
         with st.form("assessment_form"):
-            loan_amount = st.number_input("Loan Amount ($)", value=350000, step=10000)
-            income = st.number_input("Annual Income ($)", value=85000, step=5000)
-            property_val = st.number_input("Property Value ($)", value=410000, step=10000)
-            dti = st.slider("Debt-to-Income (DTI) %", 0.0, 100.0, 38.5)
-            ltv = st.slider("Loan-to-Value (LTV) %", 0.0, 150.0, 85.0)
-            term = st.selectbox("Loan Term (Months)", [180, 240, 360], index=2)
+            st.markdown("##### Financial Details")
+            c1, c2, c3 = st.columns(3)
+            loan_amount = c1.number_input("Loan Amount ($)", value=350000, step=10000)
+            income = c2.number_input("Annual Income ($)", value=85000, step=5000)
+            property_val = c3.number_input("Property Value ($)", value=410000, step=10000)
             
-            narrative = st.text_area("Loan Officer Initial Notes", "First time homebuyer. High DTI due to recent auto loan, but strong employment history.", height=100)
+            c4, c5, c6 = st.columns(3)
+            dti = c4.slider("Debt-to-Income (DTI) %", 0.0, 100.0, 38.5)
+            ltv = c5.slider("Loan-to-Value (LTV) %", 0.0, 150.0, 85.0)
+            term = c6.selectbox("Loan Term (Months)", [180, 240, 360], index=2)
+            
+            st.markdown("##### Applicant Demographics (ECOA Audit)")
+            c7, c8, c9 = st.columns(3)
+            age = c7.selectbox("Applicant Age", ["<25", "25-34", "35-44", "45-54", "55-64", "65-74", ">74"], index=2)
+            sex = c8.selectbox("Applicant Sex", ["Male", "Female"], index=0)
+            race = c9.selectbox("Applicant Race", ["White", "Black", "Asian", "Native American", "Pacific Islander"], index=0)
+            
+            st.markdown("##### Qualitative Data")
+            narrative = st.text_area("Loan Officer Initial Notes", "First time homebuyer. High DTI due to recent auto loan, but strong employment history.", height=80)
             
             st.markdown("<br>", unsafe_allow_html=True)
             submit = st.form_submit_button("▶ RUN HYBRID FUSION ANALYSIS", use_container_width=True)
@@ -331,6 +342,18 @@ if page == "🖥️ Live Underwriting Terminal":
                 "loan_amount": loan_amount, "income": income, "property_value": property_val,
                 "debt_to_income_ratio": dti, "loan_to_value_ratio": ltv, "loan_term": term,
             }
+            # Map Demographics to dummy variables (based on feature_names.json)
+            # Age
+            if age != "25-34": # 25-34 is the base case (dropped)
+                input_data[f"applicant_age_{age}"] = 1
+            # Sex (HMDA: 1=Male, 2=Female)
+            if sex == "Female":
+                input_data["applicant_sex_2"] = 1
+            # Race (HMDA: 1=Native, 2=Asian, 3=Black, 4=Islander, 5=White)
+            if race == "Asian": input_data["applicant_race_2"] = 1
+            elif race == "Black": input_data["applicant_race_3"] = 1
+            elif race == "Pacific Islander": input_data["applicant_race_4"] = 1
+            elif race == "White": input_data["applicant_race_5"] = 1
             
             res = preprocess_and_predict(input_data)
             
@@ -440,7 +463,7 @@ elif page == "📈 Hybrid Model Performance":
         st.markdown("### 📊 ROC Curve Analysis")
         img_roc = get_image('fig5_roc_curve.png')
         if img_roc:
-            st.image(img_roc, use_column_width=True)
+            st.image(img_roc, use_container_width=True)
         else:
             st.warning("⚠️ fig5_roc_curve.png not found in output/figures/. Please ensure you downloaded it from Kaggle.")
             
@@ -471,7 +494,7 @@ elif page == "⚖️ Fairness & XAI Audit":
         st.markdown("#### Global Feature Importance (Beeswarm)")
         img_shap_1 = get_image('fig9_shap_summary.png')
         if img_shap_1:
-            st.image(img_shap_1, use_column_width=True)
+            st.image(img_shap_1, use_container_width=True)
         else:
             st.warning("fig9_shap_summary.png not found.")
             
@@ -479,7 +502,7 @@ elif page == "⚖️ Fairness & XAI Audit":
         st.markdown("#### Mean Feature Impact (Bar)")
         img_shap_2 = get_image('fig10_shap_bar.png')
         if img_shap_2:
-            st.image(img_shap_2, use_column_width=True)
+            st.image(img_shap_2, use_container_width=True)
         else:
             st.warning("fig10_shap_bar.png not found.")
 
@@ -488,7 +511,7 @@ elif page == "⚖️ Fairness & XAI Audit":
     
     img_fairness = get_image('fig11_fairness_dashboard.png')
     if img_fairness:
-        st.image(img_fairness, use_column_width=True)
+        st.image(img_fairness, use_container_width=True)
     else:
         st.warning("fig11_fairness_dashboard.png not found.")
         
