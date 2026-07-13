@@ -1,10 +1,10 @@
 # HybridCredit-LLM: Institutional Risk Engine
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
-![Flask](https://img.shields.io/badge/flask-production-green.svg)
-![LightGBM](https://img.shields.io/badge/LightGBM-0.985_AUC-orange)
-![Mistral-7B](https://img.shields.io/badge/Mistral--7B-QLoRA-purple)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/flask-production-green.svg)](https://flask.palletsprojects.com/)
+[![LightGBM](https://img.shields.io/badge/LightGBM-0.985_AUC-orange)](https://lightgbm.readthedocs.io/)
+[![Mistral-7B](https://img.shields.io/badge/Mistral--7B-QLoRA-purple)](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2)
 
 **HybridCredit-LLM** is an enterprise-grade multimodal credit risk assessment platform. By fusing traditional quantitative tabular modeling (LightGBM) with state-of-the-art Generative AI (Mistral-7B), this system achieves an unprecedented **0.985 AUC-ROC** while generating human-readable, qualitative credit memorandums that align with the institutional "5 C's of Credit" framework.
 
@@ -26,12 +26,25 @@ The platform is designed to be fully compliant with Basel III regulatory standar
    - **SHAP Integrations:** Provides exact mathematical attributions for every algorithmic decision, ensuring complete transparency.
    - **ECOA Demographic Audit:** Mathematically guarantees that the model does not exhibit disparate impact against protected classes (Race, Sex, Age) in accordance with CFPB regulations.
 
-## 🛠️ Tech Stack
+## 🛠️ Comprehensive Tech Stack
 
-- **Machine Learning:** LightGBM, Scikit-Learn, SHAP, HuggingFace Transformers, PEFT (QLoRA)
-- **Backend:** Flask, Python 3.10+
-- **Frontend:** HTML5, Vanilla CSS3 (CSS Grid/Flexbox), Vanilla JavaScript
-- **Data Engineering:** Pandas, Numpy
+**Core Artificial Intelligence & Machine Learning**
+- **LLM & Generative AI:** Mistral-7B, HuggingFace Transformers
+- **Parameter-Efficient Fine-Tuning (PEFT):** QLoRA, bitsandbytes (4-bit quantization), Accelerate, TRL (SFTTrainer), PyTorch
+- **Quantitative Modeling:** LightGBM, XGBoost, Scikit-Learn, Logistic Regression (Meta-Learner)
+
+**Explainable AI (XAI) & Regulatory Fairness**
+- **Interpretability:** SHAP (TreeExplainer for Global/Local feature attribution)
+- **Algorithmic Fairness:** Disparate Impact Analysis (ECOA/CFPB compliance metrics)
+
+**Data Engineering & Analytics**
+- **Processing:** Pandas, NumPy, Imbalanced-learn (SMOTE / Class Balancing)
+- **Visual EDA:** Matplotlib, Seaborn, Missingno
+
+**Production Web Architecture (Microservices)**
+- **Backend API:** Flask, RESTful Architecture, Python 3.10+
+- **Frontend UI/UX:** HTML5, CSS3 (Premium Glassmorphism, CSS Grid, Live CSS Animations), Vanilla JavaScript (Async Fetch API, DOM manipulation)
+- **Environment:** Kaggle/Colab Notebooks, Local Virtual Environments
 
 ## 🚀 Quickstart Guide
 
