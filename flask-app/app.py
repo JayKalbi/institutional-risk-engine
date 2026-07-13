@@ -21,8 +21,10 @@ try:
     lgb_model = joblib.load(os.path.join(models_dir, 'lightgbm.joblib'))
     with open(os.path.join(data_dir, 'feature_names.json'), 'r') as f:
         feature_names = json.load(f)
+    shap_explainer = shap.TreeExplainer(lgb_model)
     model_status = "success"
 except Exception as e:
+    shap_explainer = None
     lgb_model = None
     feature_names = []
     model_status = f"error: {str(e)}"
@@ -70,9 +72,16 @@ def predict():
 
     df = pd.DataFrame([input_data])
     
-    # Feature engineering
+    # Feature engineering (must match preprocess.py exactly)
     df['loan_to_income_ratio'] = df['loan_amount'] / (df['income'] + 1)
-    df['payment_burden'] = (df['loan_amount'] * 0.065 / 12) / (df['income'] / 12 + 1)
+    
+    # Proper amortization formula: P * (r(1+r)^n) / ((1+r)^n - 1)
+    rate = 0.065 / 12
+    n_months = df['loan_term'].fillna(360)
+    monthly_payment = df['loan_amount'] * (rate * (1 + rate)**n_months) / ((1 + rate)**n_months - 1)
+    monthly_income = df['income'] / 12
+    df['payment_burden'] = monthly_payment / (monthly_income + 1)
+    
     df['high_dti_flag'] = (df['debt_to_income_ratio'] > 43).astype(int)
     
     # Ensure all features exist
@@ -108,9 +117,8 @@ def predict():
         decision = "DENY"
         css_class = "deny"
         
-    # SHAP
-    explainer = shap.TreeExplainer(lgb_model)
-    shap_vals = explainer.shap_values(X)
+    # SHAP (use cached explainer for performance)
+    shap_vals = shap_explainer.shap_values(X)
     if isinstance(shap_vals, list):
         shap_vals = shap_vals[1]
     shap_vals = shap_vals[0]
@@ -199,4 +207,4 @@ Credit Memorandum: [/INST]"""
         return jsonify({"narrative": fallback, "warning": str(e)})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
