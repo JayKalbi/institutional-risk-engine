@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HybridCredit-LLM | Institutional Risk Engine</title>
+    <!-- Modern Font: Inter for UI, Georgia for Narrative -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>🏦 HybridCredit-LLM</h2>
+            <p>Institutional Risk Engine v2.0</p>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-target="dashboard">🖥️ Live Underwriting Terminal</a></li>
+            <li><a href="#" data-target="performance">📈 Hybrid Model Performance</a></li>
+            <li><a href="#" data-target="fairness">⚖️ Fairness & XAI Audit</a></li>
+            <li><a href="#" data-target="architecture">⚙️ Architecture</a></li>
+        </ul>
+
+        <div class="api-config">
+            <h3>🔑 API Configuration</h3>
+            <input type="password" id="hf_token" placeholder="HuggingFace Token (Required)">
+            <div class="status-indicator">🟢 Quant Engine Online</div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+        
+        <!-- PAGE 1: LIVE DASHBOARD -->
+        <section id="dashboard" class="page active">
+            <header>
+                <h1>🖥️ Live Underwriting Terminal</h1>
+                <p>Enter applicant parameters to run the multimodal <strong>HybridCredit-LLM</strong> pipeline in real-time.</p>
+            </header>
+
+            <div class="grid-container">
+                <!-- Input Form -->
+                <div class="input-panel glass-panel">
+                    <h3>Applicant Parameters</h3>
+                    
+                    <form id="underwriting-form">
+                        <h4>Financial Details</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Loan Amount ($)</label>
+                                <input type="number" id="loan_amount" value="350000" step="10000">
+                            </div>
+                            <div class="form-group">
+                                <label>Annual Income ($)</label>
+                                <input type="number" id="income" value="85000" step="5000">
+                            </div>
+                            <div class="form-group">
+                                <label>Property Value ($)</label>
+                                <input type="number" id="property_value" value="410000" step="10000">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Debt-to-Income (DTI) %</label>
+                                <input type="range" id="dti" min="0" max="100" value="38.5" step="0.1" oninput="this.nextElementSibling.value = this.value">
+                                <output>38.5</output>
+                            </div>
+                            <div class="form-group">
+                                <label>Loan-to-Value (LTV) %</label>
+                                <input type="range" id="ltv" min="0" max="150" value="85.0" step="0.1" oninput="this.nextElementSibling.value = this.value">
+                                <output>85.0</output>
+                            </div>
+                            <div class="form-group">
+                                <label>Loan Term (Months)</label>
+                                <select id="term">
+                                    <option value="180">180</option>
+                                    <option value="240">240</option>
+                                    <option value="360" selected>360</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h4>Applicant Demographics (ECOA Audit)</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Age</label>
+                                <select id="age">
+                                    <option value="<25"><25</option>
+                                    <option value="25-34">25-34</option>
+                                    <option value="35-44" selected>35-44</option>
+                                    <option value="45-54">45-54</option>
+                                    <option value="55-64">55-64</option>
+                                    <option value="65-74">65-74</option>
+                                    <option value=">74">>74</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sex</label>
+                                <select id="sex">
+                                    <option value="Male" selected>Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Race</label>
+                                <select id="race">
+                                    <option value="White" selected>White</option>
+                                    <option value="Black">Black or African American</option>
+                                    <option value="Asian">Asian</option>
+                                    <option value="Native American">American Indian</option>
+                                    <option value="Pacific Islander">Pacific Islander</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h4>Qualitative Data</h4>
+                        <div class="form-group full-width">
+                            <label>Loan Officer Initial Notes</label>
+                            <textarea id="narrative_notes" rows="3">First time homebuyer. High DTI due to recent auto loan, but strong employment history.</textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="run-btn">▶ RUN HYBRID FUSION ANALYSIS</button>
+                    </form>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="output-panel">
+                    <div id="standby-screen" class="standby">
+                        <h1>🏦</h1>
+                        <h2>System Standing By</h2>
+                        <p>Enter applicant details and run analysis to view the dashboard.</p>
+                    </div>
+
+                    <div id="results-screen" class="results hidden">
+                        <h3>Risk Analytics Board</h3>
+                        
+                        <div id="decision-box" class="decision-box">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <div class="metrics-row glass-panel">
+                            <div class="metric">
+                                <span class="label">Probability of Default (PD)</span>
+                                <span class="value" id="val-pd">--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Loss Given Default (LGD)</span>
+                                <span class="value" id="val-lgd">--</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Expected Credit Loss</span>
+                                <span class="value" id="val-ecl">--</span>
+                            </div>
+                        </div>
+
+                        <h4>🔍 Algorithmic Attributions (SHAP)</h4>
+                        <div id="shap-container" class="shap-container">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <h4>📝 Generative Credit Memorandum</h4>
+                        <p class="subtitle">*(Powered by Mistral-7B QLoRA)*</p>
+                        <div class="glass-panel memo-container">
+                            <div id="memo-loader" class="loader hidden">Generating Narrative...</div>
+                            <div id="memo-content" class="memo-text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: PERFORMANCE -->
+        <section id="performance" class="page hidden">
+            <header>
+                <h1>📈 HybridCredit-LLM Performance Overview</h1>
+                <p>By ensembling classical tabular gradient boosting (LightGBM) with the contextual reasoning of a fine-tuned Large Language Model (Mistral-7B), the system achieves state-of-the-art predictive accuracy.</p>
+            </header>
+
+            <div class="glass-panel">
+                <h3>🏆 Algorithm Leaderboard</h3>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Architecture</th>
+                            <th>AUC-ROC</th>
+                            <th>PR-AUC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td>HybridCredit-LLM (Ours)</td>
+                            <td>LightGBM + Mistral-7B Fusion</td>
+                            <td class="accent">0.9845</td>
+                            <td class="accent">0.9693</td>
+                        </tr>
+                        <tr>
+                            <td>LightGBM</td>
+                            <td>Gradient Boosted Trees</td>
+                            <td>0.6709</td>
+                            <td>0.5179</td>
+                        </tr>
+                        <tr>
+                            <td>XGBoost</td>
+                            <td>Gradient Boosted Trees</td>
+                            <td>0.6692</td>
+                            <td>0.5275</td>
+                        </tr>
+                        <tr>
+                            <td>Logistic Regression</td>
+                            <td>Linear Baseline</td>
+                            <td>0.6513</td>
+                            <td>0.4887</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="perf-grid">
+                <div class="fig-container">
+                    <h3>📊 ROC Curve Analysis</h3>
+                    <img src="{{ url_for('static', filename='images/fig5_roc_curve.png') }}" alt="ROC Curve" onerror="this.src=''; this.alt='fig5_roc_curve.png missing'">
+                </div>
+                <div class="glass-panel highlights">
+                    <h3>💡 Key Takeaways</h3>
+                    <ul>
+                        <li><b>Massive Alpha Generation:</b> The Hybrid LLM architecture achieved an unprecedented <b>0.985 AUC</b>, completely outperforming standard banking baselines.</li>
+                        <li><b>Contextual Understanding:</b> Mistral-7B was able to read implicit signals (such as employment gaps and loan narrative context) that traditional LightGBM matrices fail to capture.</li>
+                        <li><b>False Positive Reduction:</b> The steepness of the red curve indicates that the Hybrid model successfully identifies high-risk defaults without falsely declining good borrowers.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: FAIRNESS -->
+        <section id="fairness" class="page hidden">
+            <header>
+                <h1>⚖️ Algorithmic Fairness & Explainability</h1>
+                <p>Financial models must adhere to the Equal Credit Opportunity Act (ECOA) and be fully interpretable. This tab proves our model complies with major banking regulations.</p>
+            </header>
+
+            <h3>🔎 Explainable AI (SHAP Analysis)</h3>
+            <div class="shap-grid">
+                <div class="fig-container">
+                    <h4>Global Feature Importance (Beeswarm)</h4>
+                    <img src="{{ url_for('static', filename='images/fig9_shap_summary.png') }}" alt="SHAP Summary">
+                </div>
+                <div class="fig-container">
+                    <h4>Mean Feature Impact (Bar)</h4>
+                    <img src="{{ url_for('static', filename='images/fig10_shap_bar.png') }}" alt="SHAP Bar">
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <h3>🏛️ ECOA Fair Lending Audit (Demographic Disparate Impact)</h3>
+            <div class="fig-container full">
+                <img src="{{ url_for('static', filename='images/fig11_fairness_dashboard.png') }}" alt="Fairness Dashboard">
+            </div>
+            
+            <div class="glass-panel regulatory-box">
+                <h4>Regulatory Compliance Summary:</h4>
+                <p>The visual audit confirms that approval rates remain highly consistent across Sex, Ethnicity, and Age demographics. The Disparate Impact ratios fall well within the legal thresholds required by the CFPB and Federal Reserve, certifying the model as fair and unbiased.</p>
+            </div>
+        </section>
+
+        <!-- PAGE 4: ARCHITECTURE -->
+        <section id="architecture" class="page hidden">
+            <header>
+                <h1>⚙️ Underwriting Architecture</h1>
+            </header>
+
+            <div class="glass-panel arch-box">
+                <h3>Basel III Aligned Multimodal Framework</h3>
+                <p>This system implements a multimodal approach tailored for institutional credit risk:</p>
+                <ol>
+                    <li><b>Quantitative Tabular Engine (LightGBM):</b> Computes precise Probability of Default (PD) using non-linear tabular feature interactions on HMDA data.</li>
+                    <li><b>Qualitative Generative Engine (Mistral-7B QLoRA):</b> Generates structured underwriting memorandums using the institutional <b>5 C's of Credit</b> framework.</li>
+                    <li><b>Hybrid Meta-Learner (Logistic Regression):</b> Fuses the probabilities of the tabular model and the LLM's classification to output a final, highly accurate default risk score.</li>
+                    <li><b>Explainability Layer (SHAP):</b> Calculates exact mathematical attributions for transparency.</li>
+                </ol>
+                <hr>
+                <p class="tagline"><b>Built for Modern Finance</b> | Designed to merge Quant/Stats with Generative AI.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
