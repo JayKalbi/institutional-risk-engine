@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sex: document.getElementById('sex').value,
             race: document.getElementById('race').value,
             loan_officer_notes: document.getElementById('narrative_notes').value,
-            hf_token: document.getElementById('hf_token').value
+            api_key: document.getElementById('hf_token').value
         };
 
         try {

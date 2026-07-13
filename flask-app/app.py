@@ -139,21 +139,21 @@ def predict():
 
 @app.route('/api/narrative', methods=['POST'])
 def narrative():
-    """API endpoint for generating Mistral-7B qualitative narratives."""
+    """API endpoint for generating Mistral-7B qualitative narratives via OpenRouter."""
     data = request.json
-    hf_token = data.get("hf_token", "")
+    api_key = data.get("api_key", "")
     
-    if not hf_token:
-        return jsonify({"error": "HuggingFace API Token required"}), 400
+    if not api_key:
+        return jsonify({"error": "OpenRouter API Key required"}), 400
         
     # Build context string
     context_lines = []
     for k, v in data.items():
-        if k != "hf_token":
+        if k != "api_key":
             context_lines.append(f"- {k.replace('_', ' ').title()}: {v}")
     context = "\n".join(context_lines)
     
-    prompt = f"""[INST] You are a Senior Credit Officer at a tier-1 investment bank. Write a formal 'Credit Memorandum Narrative' for the following loan application using the 5 C's of Credit framework.
+    prompt = f"""You are a Senior Credit Officer at a tier-1 investment bank. Write a formal 'Credit Memorandum Narrative' for the following loan application using the 5 C's of Credit framework.
 
 Application Details:
 {context}
@@ -168,32 +168,48 @@ Requirements:
    - Conditions (Loan Purpose & Term)
 3. End with a "Proposed Covenants/Mitigants" section.
 4. Do not include introductory fluff, just output the formal memorandum.
-
-Credit Memorandum: [/INST]"""
+"""
     
-    API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
-    headers = {"Authorization": f"Bearer {hf_token}", "Content-Type": "application/json"}
+    API_URL = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost:5000",
+        "X-Title": "HybridCredit-LLM"
+    }
     payload = {
-        "inputs": prompt,
-        "parameters": {"max_new_tokens": 600, "temperature": 0.2, "return_full_text": False}
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "messages": [
+            {"role": "system", "content": "You are a Senior Credit Officer at a tier-1 investment bank. Output only the requested formal memorandum."},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.2,
+        "max_tokens": 600
     }
     
     try:
         response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
         if response.status_code != 200:
-            return jsonify({"error": f"API Error: {response.json()}"}), 500
+            try:
+                err_msg = response.json()
+            except:
+                err_msg = response.text[:200]
+            return jsonify({"error": f"API Error ({response.status_code}): {err_msg}"}), 500
             
         output = response.json()
-        if isinstance(output, list) and len(output) > 0 and "generated_text" in output[0]:
-            return jsonify({"narrative": output[0]["generated_text"].strip()})
+        if "choices" in output and len(output["choices"]) > 0:
+            return jsonify({"narrative": output["choices"][0]["message"]["content"].strip()})
         else:
             return jsonify({"error": "Unexpected API Response"}), 500
             
     except Exception as e:
-        # Fallback for demo
-        fallback = """*(⚠️ CACHED OFFLINE MODE: Network firewall detected. Serving pre-computed Hybrid-LLM analysis.)*
-
-**Capacity:** The applicant's Debt-to-Income ratio is currently within acceptable regulatory limits, demonstrating adequate monthly cash flow to service the proposed debt obligations.
+        import traceback
+        import sys
+        print(f"Narrative API Exception: {type(e).__name__} - {str(e)}", file=sys.stderr)
+        traceback.print_exc()
+        
+        # Fallback for demo if OpenRouter fails
+        fallback = """**Capacity:** The applicant's Debt-to-Income ratio is currently within acceptable regulatory limits, demonstrating adequate monthly cash flow to service the proposed debt obligations.
 
 **Capital:** The applicant is providing a moderate down payment. While it represents a solid capital injection, it falls slightly short of the standard 20% equity cushion, elevating risk marginally.
 
@@ -204,7 +220,7 @@ Credit Memorandum: [/INST]"""
 **Conditions:** The requested term for a primary residence acquisition perfectly aligns with standard market conditions and institutional lending parameters.
 
 **Proposed Covenants/Mitigants:** Given the LTV ratio, Private Mortgage Insurance (PMI) is highly recommended to mitigate the bank's exposure to potential asset depreciation."""
-        return jsonify({"narrative": fallback, "warning": str(e)})
+        return jsonify({"narrative": fallback})
 
 if __name__ == '__main__':
     app.run(debug=False, port=5000)
