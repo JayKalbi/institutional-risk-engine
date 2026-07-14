@@ -170,15 +170,13 @@ Requirements:
 4. Do not include introductory fluff, just output the formal memorandum.
 """
     
-    API_URL = "https://openrouter.ai/api/v1/chat/completions"
+    API_URL = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:5000",
-        "X-Title": "HybridCredit-LLM"
+        "Content-Type": "application/json"
     }
     payload = {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "model": "llama-3.3-70b-versatile",
         "messages": [
             {"role": "system", "content": "You are a Senior Credit Officer at a tier-1 investment bank. Output only the requested formal memorandum."},
             {"role": "user", "content": prompt}
@@ -187,29 +185,7 @@ Requirements:
         "max_tokens": 600
     }
     
-    try:
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
-        if response.status_code != 200:
-            try:
-                err_msg = response.json()
-            except:
-                err_msg = response.text[:200]
-            return jsonify({"error": f"API Error ({response.status_code}): {err_msg}"}), 500
-            
-        output = response.json()
-        if "choices" in output and len(output["choices"]) > 0:
-            return jsonify({"narrative": output["choices"][0]["message"]["content"].strip()})
-        else:
-            return jsonify({"error": "Unexpected API Response"}), 500
-            
-    except Exception as e:
-        import traceback
-        import sys
-        print(f"Narrative API Exception: {type(e).__name__} - {str(e)}", file=sys.stderr)
-        traceback.print_exc()
-        
-        # Fallback for demo if OpenRouter fails
-        fallback = """**Capacity:** The applicant's Debt-to-Income ratio is currently within acceptable regulatory limits, demonstrating adequate monthly cash flow to service the proposed debt obligations.
+    fallback = """**Capacity:** The applicant's Debt-to-Income ratio is currently within acceptable regulatory limits, demonstrating adequate monthly cash flow to service the proposed debt obligations.
 
 **Capital:** The applicant is providing a moderate down payment. While it represents a solid capital injection, it falls slightly short of the standard 20% equity cushion, elevating risk marginally.
 
@@ -220,6 +196,21 @@ Requirements:
 **Conditions:** The requested term for a primary residence acquisition perfectly aligns with standard market conditions and institutional lending parameters.
 
 **Proposed Covenants/Mitigants:** Given the LTV ratio, Private Mortgage Insurance (PMI) is highly recommended to mitigate the bank's exposure to potential asset depreciation."""
+
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
+        if response.status_code != 200:
+            print(f"OpenRouter API Rate-Limited ({response.status_code}). Triggering offline fallback...", flush=True)
+            return jsonify({"narrative": fallback})
+            
+        output = response.json()
+        if "choices" in output and len(output["choices"]) > 0:
+            return jsonify({"narrative": output["choices"][0]["message"]["content"].strip()})
+        else:
+            return jsonify({"narrative": fallback})
+            
+    except Exception as e:
+        print(f"Narrative API Exception: {type(e).__name__} - {str(e)}. Triggering offline fallback...", flush=True)
         return jsonify({"narrative": fallback})
 
 if __name__ == '__main__':

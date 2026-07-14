@@ -151,7 +151,7 @@ models_cache = load_models()
 def generate_credit_memo(app_data: dict, hf_token: str) -> str:
     """Generate a formal Credit Memorandum using Mistral-7B via direct API to bypass SDK router bugs."""
     if not hf_token:
-        return "⚠️ **HuggingFace API Token required** to generate the Underwriting Narrative. Please enter it in the sidebar."
+        return "⚠️ **Groq API Key required** to generate the Underwriting Narrative. Please enter it in the sidebar."
     
     context = "\n".join([f"- {k.replace('_', ' ').title()}: {v}" for k, v in app_data.items() if v is not None])
     prompt = f"""[INST] You are a Senior Credit Officer at a tier-1 investment bank. Write a formal 'Credit Memorandum Narrative' for the following loan application using the 5 C's of Credit framework.
@@ -171,12 +171,16 @@ Requirements:
 4. Do not include introductory fluff, just output the formal memorandum.
 
 Credit Memorandum: [/INST]"""
-    
-    API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+    API_URL = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {hf_token}", "Content-Type": "application/json"}
     payload = {
-        "inputs": prompt,
-        "parameters": {"max_new_tokens": 600, "temperature": 0.2, "return_full_text": False}
+        "model": "llama-3.3-70b-versatile",
+        "messages": [
+            {"role": "system", "content": "You are a Senior Credit Officer at a tier-1 investment bank. Output only the requested formal memorandum."},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.2,
+        "max_tokens": 600
     }
     
     try:
@@ -186,8 +190,8 @@ Credit Memorandum: [/INST]"""
                 return f"❌ **API Error ({response.status_code}):** {response.json()}"
             
             output = response.json()
-            if isinstance(output, list) and len(output) > 0 and "generated_text" in output[0]:
-                return output[0]["generated_text"].strip()
+            if "choices" in output and len(output["choices"]) > 0:
+                return output["choices"][0]["message"]["content"].strip()
             else:
                 return f"❌ **Unexpected API Response:** {output}"
     except Exception as e:
@@ -290,7 +294,7 @@ page = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🔑 API Configuration")
-hf_token = st.sidebar.text_input("HuggingFace Token (Required for Live Narrative)", type="password")
+hf_token = st.sidebar.text_input("Groq API Key (Llama-3.3 70B Fast)", type="password")
 
 if models_cache['status'] == 'error':
     st.sidebar.error("⚠️ Quant Engine Offline.")
