@@ -1,7 +1,5 @@
 # Enterprise H100 Deployment Guide 🚀
 
-If your professor grants you access to the H100 AI Lab, you can completely disconnect from external APIs (like Groq) and run your own fine-tuned model 100% locally. 
-
 This guide assumes you are logging into a Linux server (like Ubuntu) which is standard for AI labs. Don't worry if you've never used Linux before; just copy and paste these commands!
 
 ---
