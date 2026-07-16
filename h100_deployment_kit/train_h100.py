@@ -8,45 +8,36 @@ from datasets import load_dataset
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
-    BitsAndBytesConfig,
     TrainingArguments
 )
-from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
+from peft import LoraConfig, get_peft_model
 from trl import SFTTrainer
 
 # ==============================================================================
 # 1. CONFIGURATION FOR H100
 # ==============================================================================
-# H100s have 80GB of VRAM each. We can use massive batch sizes compared to Kaggle.
+# H100s have 80GB of VRAM each. We do NOT need 4-bit quantization. We use bfloat16.
 model_name = "mistralai/Mistral-7B-Instruct-v0.2"
 dataset_name = "JayKalbi/Credit-Risk-Memorandums" # Replace with your HF dataset if uploaded
 output_dir = "./h100_hybrid_weights"
 
-# We use 4-bit quantization to load it incredibly fast
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16, # H100 loves bfloat16
-    bnb_4bit_use_double_quant=True,
-)
-
 # ==============================================================================
 # 2. LOAD MODEL & TOKENIZER
 # ==============================================================================
-print("🚀 Loading Mistral-7B onto H100...")
+print("🚀 Loading Mistral-7B onto H100 in bfloat16...")
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
+# Load the model directly in bfloat16 (H100 native format)
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    quantization_config=bnb_config,
+    torch_dtype=torch.bfloat16,
     device_map="auto" # Will automatically span across your 2 H100s
 )
 
 # Prepare for LoRA
 model.gradient_checkpointing_enable()
-model = prepare_model_for_kbit_training(model)
 
 lora_config = LoraConfig(
     r=64, # High rank for better learning (H100 can handle it)
@@ -73,9 +64,9 @@ dataset = load_dataset(dataset_name, split="train")
 print("🔥 Beginning H100 Training Phase...")
 training_args = TrainingArguments(
     output_dir=output_dir,
-    per_device_train_batch_size=32, # Massive batch size for H100 (Kaggle was likely 2 or 4)
+    per_device_train_batch_size=16, # High batch size for H100
     gradient_accumulation_steps=2,
-    optim="paged_adamw_32bit",
+    optim="adamw_torch",
     save_steps=100,
     logging_steps=10,
     learning_rate=2e-4,
@@ -104,8 +95,11 @@ trainer = SFTTrainer(
 trainer.train()
 
 # ==============================================================================
-# 5. SAVE WEIGHTS
+# 5. MERGE AND SAVE WEIGHTS FOR VLLM
 # ==============================================================================
-print(f"✅ Training Complete. Saving fine-tuned weights to {output_dir}")
-trainer.model.save_pretrained(output_dir)
+print(f"✅ Training Complete. Merging weights for vLLM inference...")
+# We must merge the LoRA adapters back into the base model so vLLM can load it instantly
+merged_model = trainer.model.merge_and_unload()
+merged_model.save_pretrained(output_dir)
 tokenizer.save_pretrained(output_dir)
+print(f"🎉 Fully merged model saved to {output_dir}. Ready for serve_h100.sh!")
