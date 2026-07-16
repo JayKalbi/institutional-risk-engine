@@ -4,7 +4,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/flask-production-green.svg)](https://flask.palletsprojects.com/)
 [![LightGBM](https://img.shields.io/badge/LightGBM-0.985_AUC-orange)](https://lightgbm.readthedocs.io/)
-[![Mistral-7B](https://img.shields.io/badge/Mistral--7B-QLoRA-purple)](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2)
+[![Mistral-7B](https://img.shields.io/badge/Llama--3.3--70B-Groq-purple)](https://groq.com/)
 
 **HybridCredit-LLM** is an enterprise-grade multimodal credit risk assessment platform. By fusing traditional quantitative tabular modeling (LightGBM) with state-of-the-art Generative AI (Mistral-7B), this system achieves an unprecedented **0.985 AUC-ROC** while generating human-readable, qualitative credit memorandums that align with the institutional "5 C's of Credit" framework.
 
@@ -29,7 +29,7 @@ The platform is designed to be fully compliant with Basel III regulatory standar
 ## 🛠️ Comprehensive Tech Stack
 
 **Core Artificial Intelligence & Machine Learning**
-- **LLM & Generative AI:** Mistral-7B, HuggingFace Transformers
+- **LLM & Generative AI:** Llama-3.3-70B (via Groq Inference Engine), Mistral-7B QLoRA
 - **Parameter-Efficient Fine-Tuning (PEFT):** QLoRA, bitsandbytes (4-bit quantization), Accelerate, TRL (SFTTrainer), PyTorch
 - **Quantitative Modeling:** LightGBM, XGBoost, Scikit-Learn, Logistic Regression (Meta-Learner)
 
@@ -56,14 +56,14 @@ cd institutional-risk-engine
 pip install -r requirements.txt
 ```
 
-### 2. Launch the Application
-Start the Flask backend server:
-```bash
-python flask-app/app.py
+### 2. Launch the Application (Windows)
+We have included a batch script that automatically sets up the environment and starts the backend.
+```cmd
+start_demo.bat
 ```
 Open your browser and navigate to `http://127.0.0.1:5000` to access the Live Underwriting Terminal.
 
-*Note: To utilize the live generative text features in the terminal, you must enter a valid HuggingFace API token in the top navigation bar.*
+*Note: To utilize the live generative text features in the terminal, you must enter a valid **Groq API Key** in the top navigation bar. If offline, the system will automatically fall back to pre-cached narratives.*
 
 ## 📁 Repository Structure
 
@@ -73,6 +73,9 @@ institutional-risk-engine/
 │   ├── app.py               # REST API endpoints & Flask routing
 │   ├── static/              # CSS, JS, and pre-computed visual audits
 │   └── templates/           # Custom HTML SPA template
+├── streamlit-app/           # Backup UI dashboard built with Streamlit
+├── presentation/            # Interactive custom HTML slide deck
+├── start_demo.bat           # Automated Windows launcher script
 ├── kaggle-notebooks/        # Data science & modeling pipeline
 │   ├── 01_data_download.ipynb
 │   ├── 02_eda.ipynb
