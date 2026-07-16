@@ -75,6 +75,7 @@ institutional-risk-engine/
 │   └── templates/           # Custom HTML SPA template
 ├── streamlit-app/           # Backup UI dashboard built with Streamlit
 ├── presentation/            # Interactive custom HTML slide deck
+├── h100_deployment_kit/     # Enterprise H100 GPU training & inference scripts
 ├── start_demo.bat           # Automated Windows launcher script
 ├── kaggle-notebooks/        # Data science & modeling pipeline
 │   ├── 01_data_download.ipynb
