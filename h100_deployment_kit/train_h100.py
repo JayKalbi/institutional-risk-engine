@@ -50,13 +50,40 @@ lora_config = LoraConfig(
 model = get_peft_model(model, lora_config)
 
 # ==============================================================================
-# 3. PREPARE DATASET
+# 3. PREPARE DATASET (LOCAL PARQUET METHOD)
 # ==============================================================================
-# If your dataset is local (e.g. a CSV file), uncomment the next line:
-# dataset = load_dataset("csv", data_files="my_local_data.csv", split="train")
+print("📊 Loading local parquet dataset...")
+import pandas as pd
+from datasets import Dataset
 
-# Assuming it's on HuggingFace:
-dataset = load_dataset(dataset_name, split="train")
+# Determine path to the processed data in the main repository
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_path = os.path.join(base_dir, 'output', 'data', 'processed', 'hmda_binary.parquet')
+
+# Read the local data
+df = pd.read_parquet(data_path)
+
+# Filter for approved (1) and denied (3)
+df = df[df['action_taken'].isin([1, 3])].copy()
+df['default'] = (df['action_taken'] == 3).astype(int)
+
+# Create the exact prompt strings that the LLM will train on
+def format_prompt(row):
+    # This simulates the logic from your Kaggle notebook
+    outcome = "HIGH" if row['default'] == 1 else "LOW"
+    prompt = f"<s>[INST] Evaluate the default risk for this loan application.\n\n"
+    prompt += f"Income: ${row.get('income', 0)*1000:,.2f}\n"
+    prompt += f"Loan Amount: ${row.get('loan_amount', 0)*1000:,.2f}\n"
+    prompt += f"LTV Ratio: {row.get('loan_to_value_ratio', 0)}%\n"
+    prompt += f"DTI Ratio: {row.get('debt_to_income_ratio', 0)}%\n"
+    prompt += f"[/INST]\nDefault Risk: {outcome}</s>"
+    return prompt
+
+print("Formatting prompts...")
+df['text'] = df.apply(format_prompt, axis=1)
+
+# Convert the Pandas DataFrame into a HuggingFace Dataset object
+dataset = Dataset.from_pandas(df[['text']])
 
 # ==============================================================================
 # 4. H100 OPTIMIZED TRAINING ARGUMENTS
