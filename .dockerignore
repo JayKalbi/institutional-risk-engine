@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+venv
+credit-risk-env
+h100_env
+node_modules
+*.log
+output_dataset.zip
+kaggle-notebooks/.ipynb_checkpoints

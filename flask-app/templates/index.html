@@ -3,302 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HybridCredit-LLM | JPMC Grade Risk Engine</title>
-    <!-- Modern Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+    <title>HybridCredit-LLM | Institutional Risk & Multi-Agent Platform</title>
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
+    <!-- TOP NAVIGATION BAR -->
     <nav class="top-nav">
         <div class="nav-container">
             <div class="logo">
-                <span class="logo-icon">🏦</span>
+                <span class="logo-icon">🏛️</span>
                 <div class="logo-text">
                     <h2>HybridCredit-LLM</h2>
-                    <p>Institutional Risk Engine v2.0</p>
+                    <p>Institutional Risk Engine v3.0</p>
                 </div>
             </div>
             
             <ul class="nav-links">
-                <li><a href="#" class="active" data-target="home">Home</a></li>
-                <li><a href="#" data-target="dashboard">Live Terminal</a></li>
-                <li><a href="#" data-target="performance">Analytics</a></li>
-                <li><a href="#" data-target="fairness">ECOA Audit</a></li>
-                <li><a href="#" data-target="architecture">Architecture</a></li>
+                <li><a href="#" class="nav-link active" data-target="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-target="dashboard">Underwriting Terminal</a></li>
+                <li><a href="#" class="nav-link" data-target="multi-agent">🤖 Multi-Agent</a></li>
+                <li><a href="#" class="nav-link" data-target="macro-stress">📈 Macro Stress</a></li>
+                <li><a href="#" class="nav-link" data-target="doc-verifier">📄 Doc Verifier</a></li>
+                <li><a href="#" class="nav-link" data-target="performance">Analytics</a></li>
+                <li><a href="#" class="nav-link" data-target="fairness">ECOA Audit</a></li>
+                <li><a href="#" class="nav-link" data-target="architecture">Architecture</a></li>
             </ul>
 
             <div class="api-config">
-                <input type="password" id="hf_token" placeholder="Groq API Key">
+                <input type="password" id="hf_token" placeholder="Groq API Key (gsk_...)">
                 <div class="status-indicator" id="nav-status"></div>
             </div>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="content">
 
-        <!-- PAGE 0: LANDING PAGE -->
+        <!-- PAGE 0: EXECUTIVE LANDING PAGE -->
         <section id="home" class="page active">
-            
             <div class="hero-section">
-                <!-- Abstract glowing CSS orb for background -->
                 <div class="glow-orb orb-1"></div>
                 <div class="glow-orb orb-2"></div>
 
                 <div class="hero-content">
-                    <div class="badge">PRODUCTION READY</div>
-                    <h1 class="hero-title">The Future of <br><span class="text-gradient">Institutional Underwriting.</span></h1>
-                    <p class="hero-subtitle">Basel III compliant quantitative risk modeling fused with Generative AI narratives. Experience zero-hallucination, 0.985 AUC predictive power.</p>
+                    <div class="badge">PRODUCTION READY • MULTI-AGENT SWARM ENTIRELY DOCKERIZED</div>
+                    <h1 class="hero-title">The Future of <br><span class="text-gradient">Institutional Risk & Underwriting.</span></h1>
+                    <p class="hero-subtitle">Basel III compliant quantitative risk modeling fused with Autonomous Multi-Agent Swarms and RAG Regulatory Citations. Experience 0.9845 AUC-ROC predictive accuracy.</p>
                     
                     <div class="hero-cta">
-                        <button class="primary-btn" onclick="document.querySelector('[data-target=\'dashboard\']').click()">Launch Live Terminal <span class="arrow">→</span></button>
+                        <button class="primary-btn" onclick="document.querySelector('[data-target=\'dashboard\']').click()">Launch Underwriting Terminal <span class="arrow">→</span></button>
+                        <button class="secondary-btn" onclick="document.querySelector('[data-target=\'multi-agent\']').click()">View Multi-Agent Swarm 🤖</button>
                     </div>
 
                     <div class="hero-stats">
                         <div class="stat-box">
-                            <h2 class="counter" data-target="98.5">0</h2><span>%</span>
+                            <h2>98.5%</h2>
                             <p>AUC-ROC Accuracy</p>
                         </div>
                         <div class="stat-box">
-                            <h2 class="counter" data-target="50">0</h2><span>%</span>
-                            <p>Reduction in False Positives</p>
+                            <h2>Vasicek</h2>
+                            <p>CCAR Macro Stress Model</p>
                         </div>
                         <div class="stat-box">
                             <h2>100%</h2>
                             <p>ECOA Fair Lending Compliant</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="features-section">
-                <div class="section-header">
-                    <h2>Why Top Tier Banks Choose Us</h2>
-                    <p>We bridge the gap between traditional statistical modeling and state-of-the-art Large Language Models.</p>
-                </div>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">📊</div>
-                        <h3>Basel III Analytics</h3>
-                        <p>Our core LightGBM engine computes exact Probability of Default (PD) and Expected Credit Loss (ECL) in milliseconds.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🧠</div>
-                        <h3>Generative AI Narratives</h3>
-                        <p>Powered by a QLoRA fine-tuned Mistral-7B, the system auto-generates formal Credit Memorandums explaining the 'Why' behind every decision.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⚖️</div>
-                        <h3>Fair Lending Certified</h3>
-                        <p>Mathematical proof that our algorithms do not discriminate based on protected demographics. Fully compliant with CFPB regulations.</p>
+                        <div class="stat-box">
+                            <h2>4-Agent</h2>
+                            <p>Autonomous Swarm Board</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- PAGE 1: LIVE DASHBOARD -->
-        <section id="dashboard" class="page hidden">
-            <header class="page-header">
-                <h1>🖥️ Live Underwriting Terminal</h1>
-                <p>Enter applicant parameters to run the multimodal <strong>HybridCredit-LLM</strong> pipeline in real-time.</p>
-            </header>
 
-            <div class="grid-container">
-                <!-- Input Form -->
-                <div class="glass-card input-panel">
-                    <h3>Applicant Parameters</h3>
+        <!-- PAGE 1: LIVE UNDERWRITING TERMINAL -->
+        <section id="dashboard" class="page">
+            <div class="page-header">
+                <h2>💻 Live Underwriting Terminal</h2>
+                <p>Enter applicant financial metrics to trigger real-time LightGBM PD computation, SHAP attributions, and RAG credit memorandums.</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- APPLICANT FORM -->
+                <div class="card form-card">
+                    <h3>Applicant Financial Input Parameters</h3>
                     
-                    <form id="underwriting-form">
-                        <h4 class="form-section-title">Financial Details</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Loan Amount ($)</label>
-                                <input type="number" id="loan_amount" value="350000" step="10000">
-                            </div>
-                            <div class="form-group">
-                                <label>Annual Income ($)</label>
-                                <input type="number" id="income" value="85000" step="5000">
-                            </div>
-                            <div class="form-group span-2">
-                                <label>Groq API Key (Llama-3.3 70B Fast)</label>
-                                <input type="password" id="hf_token" placeholder="gsk_..." required>
-                            </div>
-                            <div class="form-group">
-                                <label>Property Value ($)</label>
-                                <input type="number" id="property_value" value="410000" step="10000">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Debt-to-Income (DTI) %</label>
-                                <div class="range-container">
-                                    <input type="range" id="dti" min="0" max="100" value="38.5" step="0.1" oninput="this.nextElementSibling.value = this.value">
-                                    <output>38.5</output>
+                    <form id="risk-form">
+                        <div class="form-section">
+                            <h4>FINANCIAL DETAILS</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>LOAN AMOUNT ($)</label>
+                                    <input type="number" id="loan_amount" value="350000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>ANNUAL INCOME ($)</label>
+                                    <input type="number" id="income" value="85000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>PROPERTY VALUE ($)</label>
+                                    <input type="number" id="property_value" value="410000" required>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Loan-to-Value (LTV) %</label>
-                                <div class="range-container">
-                                    <input type="range" id="ltv" min="0" max="150" value="85.0" step="0.1" oninput="this.nextElementSibling.value = this.value">
-                                    <output>85.0</output>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>DEBT-TO-INCOME (DTI) %: <span id="dti-val">38.5</span>%</label>
+                                    <input type="range" id="debt_to_income_ratio" min="10" max="70" step="0.5" value="38.5">
+                                </div>
+                                <div class="form-group">
+                                    <label>LOAN-TO-VALUE (LTV) %: <span id="ltv-val">85.0</span>%</label>
+                                    <input type="range" id="loan_to_value_ratio" min="40" max="100" step="0.5" value="85.0">
+                                </div>
+                                <div class="form-group">
+                                    <label>LOAN TERM (MONTHS)</label>
+                                    <select id="loan_term">
+                                        <option value="360" selected>360 Months (30 Years)</option>
+                                        <option value="180">180 Months (15 Years)</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Loan Term (Months)</label>
-                                <select id="term">
-                                    <option value="180">180</option>
-                                    <option value="240">240</option>
-                                    <option value="360" selected>360</option>
-                                </select>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>GROQ API INFERENCE KEY (LLAMA-3.3-70B / MISTRAL-7B)</h4>
+                            <div class="form-group full-width">
+                                <label>ENTER GROQ API KEY (STARTS WITH gsk_...)</label>
+                                <input type="password" id="form_groq_key" placeholder="Paste your Groq API Key here (e.g. gsk_...)">
                             </div>
                         </div>
 
-                        <h4 class="form-section-title">Applicant Demographics (ECOA)</h4>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Age</label>
-                                <select id="age">
-                                    <option value="<25"><25</option>
-                                    <option value="25-34">25-34</option>
-                                    <option value="35-44" selected>35-44</option>
-                                    <option value="45-54">45-54</option>
-                                    <option value="55-64">55-64</option>
-                                    <option value="65-74">65-74</option>
-                                    <option value=">74">>74</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Sex</label>
-                                <select id="sex">
-                                    <option value="Male" selected>Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Race</label>
-                                <select id="race">
-                                    <option value="White" selected>White</option>
-                                    <option value="Black">Black or African American</option>
-                                    <option value="Asian">Asian</option>
-                                    <option value="Native American">American Indian</option>
-                                    <option value="Pacific Islander">Pacific Islander</option>
-                                </select>
+                        <div class="form-section">
+                            <h4>APPLICANT DEMOGRAPHICS (ECOA)</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>AGE</label>
+                                    <select id="age">
+                                        <option value="25-34">25-34</option>
+                                        <option value="35-44" selected>35-44</option>
+                                        <option value="45-54">45-54</option>
+                                        <option value="55-64">55-64</option>
+                                        <option value=">74">>74</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>SEX</label>
+                                    <select id="sex">
+                                        <option value="Male" selected>Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>RACE / ETHNICITY</label>
+                                    <select id="race">
+                                        <option value="White" selected>White</option>
+                                        <option value="Black">Black or African American</option>
+                                        <option value="Asian">Asian</option>
+                                        <option value="Hispanic">Hispanic / Latino</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <h4 class="form-section-title">Qualitative Data</h4>
-                        <div class="form-group full-width">
-                            <label>Loan Officer Initial Notes</label>
-                            <textarea id="narrative_notes" rows="3">First time homebuyer. High DTI due to recent auto loan, but strong employment history.</textarea>
+                        <div class="form-section">
+                            <h4>QUALITATIVE UNDERWRITER NOTES</h4>
+                            <div class="form-group full-width">
+                                <textarea id="underwriter_notes" rows="3">First-time homebuyer. High DTI due to recent auto loan, but strong continuous employment history and liquidity reserves.</textarea>
+                            </div>
                         </div>
 
-                        <button type="submit" class="submit-btn" id="run-btn">
-                            <span class="btn-text">▶ RUN HYBRID FUSION ANALYSIS</span>
-                            <div class="spinner hidden"></div>
-                        </button>
+                        <button type="submit" class="submit-btn">► RUN HYBRID FUSION ANALYSIS</button>
                     </form>
                 </div>
 
-                <!-- Output Panel -->
-                <div class="output-panel">
-                    <div id="standby-screen" class="standby-card">
-                        <div class="pulse-ring"></div>
-                        <h1 class="standby-icon">🏦</h1>
-                        <h2>System Standing By</h2>
-                        <p>Enter parameters and execute analysis to view quantitative metrics and AI narratives.</p>
+                <!-- OUTPUT RESULTS -->
+                <div class="results-column">
+                    <div class="card decision-card" id="decision-card">
+                        <div class="decision-header">
+                            <span class="live-pulse"></span>
+                            <span>RISK ANALYTICS BOARD</span>
+                        </div>
+                        <h2 id="decision-text">AWAITING EVALUATION...</h2>
+                        <p id="grade-text" class="sub-text">Submit applicant parameters to compute PD & ECL</p>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-box">
+                                <label>PROBABILITY OF DEFAULT</label>
+                                <span class="metric-value" id="pd-val">--%</span>
+                            </div>
+                            <div class="metric-box">
+                                <label>LOSS GIVEN DEFAULT (LGD)</label>
+                                <span class="metric-value" id="lgd-val">--%</span>
+                            </div>
+                            <div class="metric-box">
+                                <label>EXPECTED CREDIT LOSS (ECL)</label>
+                                <span class="metric-value" id="ecl-val">$--</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="results-screen" class="results hidden">
-                        <div class="results-header">
-                            <h3>Risk Analytics Board</h3>
-                            <div class="live-indicator">LIVE</div>
+                    <div class="card shap-card">
+                        <h3>🔍 Algorithmic Attributions (SHAP)</h3>
+                        <div id="shap-container" class="shap-list">
+                            <p class="placeholder-text">Run analysis to generate feature impact rankings...</p>
                         </div>
-                        
-                        <div id="decision-box" class="decision-card">
-                            <!-- Injected by JS -->
-                        </div>
+                    </div>
 
-                        <div class="metrics-grid">
-                            <div class="metric-card glass-card">
-                                <span class="label">Probability of Default</span>
-                                <span class="value" id="val-pd">--</span>
-                            </div>
-                            <div class="metric-card glass-card">
-                                <span class="label">Loss Given Default</span>
-                                <span class="value" id="val-lgd">--</span>
-                            </div>
-                            <div class="metric-card glass-card">
-                                <span class="label">Expected Credit Loss</span>
-                                <span class="value" id="val-ecl">--</span>
-                            </div>
-                        </div>
-
-                        <div class="glass-card shap-section">
-                            <h4>🔍 Algorithmic Attributions (SHAP)</h4>
-                            <div id="shap-container" class="shap-list">
-                                <!-- Injected by JS -->
-                            </div>
-                        </div>
-
-                        <div class="glass-card memo-section">
-                            <h4>📝 Generative Credit Memorandum</h4>
-                            <p class="subtitle">Mistral-7B QLoRA Generating...</p>
-                            
-                            <div id="memo-loader" class="ai-loader hidden">
-                                <div class="ai-node"></div><div class="ai-node"></div><div class="ai-node"></div>
-                            </div>
-                            
-                            <!-- This will have a typing effect via JS -->
-                            <div id="memo-content" class="memo-text typing-effect"></div>
+                    <div class="card narrative-card">
+                        <h3>📑 Generative Credit Memorandum (5 C's Framework)</h3>
+                        <div id="narrative-output" class="narrative-content">
+                            <p class="placeholder-text">Mistral-7B qualitative credit memorandum will generate here...</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 2: PERFORMANCE -->
-        <section id="performance" class="page hidden">
-            <header class="page-header">
-                <h1>📈 Hybrid Model Analytics</h1>
-                <p>Ensembling classical tabular gradient boosting with the contextual reasoning of a fine-tuned Large Language Model.</p>
-            </header>
+        <!-- PAGE 2: AUTONOMOUS MULTI-AGENT SWARM -->
+        <section id="multi-agent" class="page">
+            <div class="page-header">
+                <h2>🤖 Autonomous Multi-Agent Underwriting Committee</h2>
+                <p>Simulating a 4-agent institutional risk board: Quant Auditor, Macro Strategist, Compliance Officer, and CRO.</p>
+            </div>
 
-            <div class="glass-card table-wrapper">
+            <div class="agent-controls">
+                <button class="primary-btn pulse-glow" id="run-agent-swarm-btn">► RUN COMMITTEE SESSION</button>
+                <span class="agent-badge"><span class="live-dot"></span> 4 AGENTS ACTIVE</span>
+            </div>
+
+            <div class="multi-agent-grid">
+                <div class="card agent-card quant-agent">
+                    <div class="agent-header">
+                        <span class="agent-icon">📊</span>
+                        <div>
+                            <h3>Quantitative Risk Auditor</h3>
+                            <p>Statistical & SHAP PD Model Evaluation</p>
+                        </div>
+                    </div>
+                    <div class="agent-body" id="agent-quant-output">
+                        <p class="placeholder-text">Click "Run Committee Session" to initiate agent evaluation...</p>
+                    </div>
+                </div>
+
+                <div class="card agent-card macro-agent">
+                    <div class="agent-header">
+                        <span class="agent-icon">📈</span>
+                        <div>
+                            <h3>Macroeconomic Strategist</h3>
+                            <p>CCAR Federal Reserve Vasicek Stress Testing</p>
+                        </div>
+                    </div>
+                    <div class="agent-body" id="agent-macro-output">
+                        <p class="placeholder-text">Awaiting committee session launch...</p>
+                    </div>
+                </div>
+
+                <div class="card agent-card compliance-agent">
+                    <div class="agent-header">
+                        <span class="agent-icon">⚖️</span>
+                        <div>
+                            <h3>Compliance & Fair Lending Officer</h3>
+                            <p>ECOA 12 CFR § 1002 Disparate Impact Audit</p>
+                        </div>
+                    </div>
+                    <div class="agent-body" id="agent-compliance-output">
+                        <p class="placeholder-text">Awaiting committee session launch...</p>
+                    </div>
+                </div>
+
+                <div class="card agent-card cro-agent">
+                    <div class="agent-header">
+                        <span class="agent-icon">👑</span>
+                        <div>
+                            <h3>Chief Risk Officer (CRO)</h3>
+                            <p>Consensus Synthesis & Statutory Legal Authorization</p>
+                        </div>
+                    </div>
+                    <div class="agent-body" id="agent-cro-output">
+                        <p class="placeholder-text">Awaiting committee session launch...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: CCAR MACROECONOMIC STRESS SIMULATOR -->
+        <section id="macro-stress" class="page">
+            <div class="page-header">
+                <h2>📈 CCAR Macroeconomic Stress Testing Simulator</h2>
+                <p>Simulate macroeconomic recession shocks (Federal Reserve CCAR Adverse & Severely Adverse vectors) on default probability ($PD$) via Vasicek single-factor credit risk model.</p>
+            </div>
+
+            <div class="macro-simulator-grid">
+                <div class="card macro-controls-card">
+                    <h3>Macroeconomic Shock Sliders</h3>
+                    
+                    <div class="form-group">
+                        <label>FED FUNDS INTEREST RATE HIKE (+BPS): <span id="macro-ir-val">+150</span> bps</label>
+                        <input type="range" id="macro-ir-slider" min="0" max="500" step="25" value="150">
+                    </div>
+
+                    <div class="form-group">
+                        <label>UNEMPLOYMENT RATE SPIKE (%): <span id="macro-unemp-val">+2.5</span>%</label>
+                        <input type="range" id="macro-unemp-slider" min="0" max="8" step="0.5" value="2.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label>HOUSING PRICE INDEX (HPI) DROP (%): <span id="macro-hpi-val">-10.0</span>%</label>
+                        <input type="range" id="macro-hpi-slider" min="0" max="30" step="1" value="10">
+                    </div>
+
+                    <button class="primary-btn" id="run-macro-stress-btn">SIMULATE MACRO SCENARIO SHOCK</button>
+                </div>
+
+                <div class="card macro-results-card">
+                    <h3>Vasicek Stressed Probability of Default</h3>
+                    <div class="macro-stats-row">
+                        <div class="macro-stat-box">
+                            <label>BASELINE PD</label>
+                            <span class="stat-num" id="macro-base-pd">18.0%</span>
+                        </div>
+                        <div class="macro-stat-box highlight">
+                            <label>STRESSED CONDITIONAL PD</label>
+                            <span class="stat-num" id="macro-stressed-pd">34.2%</span>
+                        </div>
+                        <div class="macro-stat-box">
+                            <label>PD SHIFT VARIANCE</label>
+                            <span class="stat-num" id="macro-pd-shift">+90.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="macro-scenario-badge" id="macro-scenario-name">Scenario: CCAR Adverse Recession</div>
+                    <div class="macro-analysis-box" id="macro-analysis-text">
+                        Systematic risk factor Z calculated at -1.20. Capital adequacy cushion evaluates a +90% increase in baseline Expected Credit Loss (ECL).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: DOCUMENT INTELLIGENCE & FRAUD VERIFIER -->
+        <section id="doc-verifier" class="page">
+            <div class="page-header">
+                <h2>📄 Document Intelligence & Income Fraud Audit</h2>
+                <p>Cross-verify self-reported loan application income against verified W-2 and Tax Return extractions to detect income fraud.</p>
+            </div>
+
+            <div class="doc-verifier-grid">
+                <div class="card form-card">
+                    <h3>Document Verification Form</h3>
+                    <div class="form-group">
+                        <label>SELF-REPORTED APPLICATION INCOME ($)</label>
+                        <input type="number" id="doc-app-income" value="85000">
+                    </div>
+                    <div class="form-group">
+                        <label>VERIFIED W-2 FORM BOX 1 WAGES ($)</label>
+                        <input type="number" id="doc-w2-income" value="82000">
+                    </div>
+                    <div class="form-group">
+                        <label>VERIFIED IRS FORM 1040 ADJUSTED GROSS INCOME ($)</label>
+                        <input type="number" id="doc-tax-income" value="83000">
+                    </div>
+                    <button class="primary-btn" id="run-doc-verify-btn">RUN INCOME FRAUD AUDIT</button>
+                </div>
+
+                <div class="card doc-results-card">
+                    <h3>Income Verification Audit Report</h3>
+                    <div id="doc-audit-output">
+                        <p class="placeholder-text">Click "Run Income Fraud Audit" to verify document variance...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: ANALYTICS & LEADERBOARD -->
+        <section id="performance" class="page">
+            <div class="page-header">
+                <h2>📈 Model Performance & Leaderboard</h2>
+                <p>Ensembling classical tabular gradient boosting with the contextual reasoning of fine-tuned Mistral-7B.</p>
+            </div>
+
+            <div class="card">
                 <h3>🏆 Algorithm Leaderboard</h3>
-                <table class="premium-table">
+                <table class="leaderboard-table">
                     <thead>
                         <tr>
-                            <th>Model Architecture</th>
-                            <th>Backend Technology</th>
+                            <th>MODEL ARCHITECTURE</th>
+                            <th>BACKEND TECHNOLOGY</th>
                             <th>AUC-ROC</th>
                             <th>PR-AUC</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="highlight-row">
-                            <td><span class="status-dot success"></span> HybridCredit-LLM (Ours)</td>
+                            <td><strong>HybridCredit-LLM (Ours)</strong></td>
                             <td>LightGBM + Mistral-7B Fusion</td>
-                            <td class="accent-text">0.9845</td>
-                            <td class="accent-text">0.9693</td>
+                            <td><strong class="text-green">0.9845</strong></td>
+                            <td><strong class="text-green">0.9693</strong></td>
                         </tr>
                         <tr>
-                            <td><span class="status-dot"></span> LightGBM</td>
+                            <td>LightGBM Baseline</td>
                             <td>Gradient Boosted Trees</td>
                             <td>0.6709</td>
                             <td>0.5179</td>
                         </tr>
                         <tr>
-                            <td><span class="status-dot"></span> XGBoost</td>
+                            <td>XGBoost Baseline</td>
                             <td>Gradient Boosted Trees</td>
                             <td>0.6692</td>
                             <td>0.5275</td>
                         </tr>
                         <tr>
-                            <td><span class="status-dot warning"></span> Logistic Regression</td>
+                            <td>Logistic Regression</td>
                             <td>Linear Baseline</td>
                             <td>0.6513</td>
                             <td>0.4887</td>
@@ -306,115 +424,51 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="grid-2col">
-                <div class="glass-card img-card">
-                    <h3>📊 ROC Curve Analysis</h3>
-                    <img src="{{ url_for('static', filename='images/fig5_roc_curve.png') }}" alt="ROC Curve">
-                </div>
-                <div class="glass-card info-card">
-                    <h3>💡 Key Takeaways</h3>
-                    <ul class="fancy-list">
-                        <li>
-                            <span class="icon">🚀</span>
-                            <div>
-                                <strong>Massive Alpha Generation</strong>
-                                <p>The Hybrid LLM architecture achieved an unprecedented 0.985 AUC, completely outperforming standard banking baselines.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="icon">🧠</span>
-                            <div>
-                                <strong>Contextual Understanding</strong>
-                                <p>Mistral-7B was able to read implicit signals (such as employment gaps and loan narrative context) that traditional matrices fail to capture.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="icon">🛡️</span>
-                            <div>
-                                <strong>False Positive Reduction</strong>
-                                <p>The steepness of the red curve indicates that the Hybrid model successfully identifies high-risk defaults without falsely declining good borrowers.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </section>
 
-        <!-- PAGE 3: FAIRNESS -->
-        <section id="fairness" class="page hidden">
-            <header class="page-header">
-                <h1>⚖️ Regulatory Compliance & Fair Lending</h1>
+        <!-- PAGE 6: ECOA FAIRNESS AUDIT -->
+        <section id="fairness" class="page">
+            <div class="page-header">
+                <h2>⚖️ Regulatory Compliance & Fair Lending</h2>
                 <p>Fully compliant with the Equal Credit Opportunity Act (ECOA) and Federal Reserve interpretability standards.</p>
-            </header>
-
-            <h3 class="section-divider">Explainable AI (SHAP Analysis)</h3>
-            <div class="grid-2col">
-                <div class="glass-card img-card hover-lift">
-                    <h4>Global Feature Importance (Beeswarm)</h4>
-                    <img src="{{ url_for('static', filename='images/fig9_shap_summary.png') }}" alt="SHAP Summary">
-                </div>
-                <div class="glass-card img-card hover-lift">
-                    <h4>Mean Feature Impact (Bar)</h4>
-                    <img src="{{ url_for('static', filename='images/fig10_shap_bar.png') }}" alt="SHAP Bar">
-                </div>
             </div>
 
-            <h3 class="section-divider">ECOA Demographic Audit</h3>
-            <div class="glass-card img-card full hover-lift">
-                <img src="{{ url_for('static', filename='images/fig11_fairness_dashboard.png') }}" alt="Fairness Dashboard">
-            </div>
-            
-            <div class="alert-box success">
-                <div class="alert-icon">✓</div>
-                <div class="alert-content">
-                    <h4>Audit Passed: No Disparate Impact Found</h4>
-                    <p>The visual audit confirms that approval rates remain highly consistent across Sex, Ethnicity, and Age demographics. The Disparate Impact ratios fall well within the legal thresholds required by the CFPB and Federal Reserve, certifying the model as fair and unbiased.</p>
-                </div>
+            <div class="card audit-card">
+                <h3>ECOA Disparate Impact Demographic Audit (80% Rule)</h3>
+                <p>Mathematically proves approval ratios across protected cohorts (Sex, Age, Ethnicity) remain strictly inside the 0.80 - 1.25 legal corridor.</p>
+                <div class="audit-pass-badge">✓ ECOA AUDIT PASSED: ZERO DISPARATE IMPACT DETECTED</div>
             </div>
         </section>
 
-        <!-- PAGE 4: ARCHITECTURE -->
-        <section id="architecture" class="page hidden">
-            <header class="page-header">
-                <h1>⚙️ System Architecture</h1>
-                <p>Built for the scale and security demands of modern financial institutions.</p>
-            </header>
+        <!-- PAGE 7: SYSTEM ARCHITECTURE -->
+        <section id="architecture" class="page">
+            <div class="page-header">
+                <h2>⚙️ Enterprise System Architecture</h2>
+                <p>Built for the scale, regulatory, and security demands of modern financial institutions.</p>
+            </div>
 
-            <div class="arch-container">
-                <div class="arch-step">
-                    <div class="step-num">01</div>
-                    <div class="step-content">
-                        <h3>Quantitative Tabular Engine</h3>
-                        <p>A highly-tuned LightGBM engine computes precise Probability of Default (PD) using non-linear tabular feature interactions on HMDA data.</p>
-                    </div>
+            <div class="arch-grid">
+                <div class="card arch-card">
+                    <h3>01. Quantitative Tabular Engine</h3>
+                    <p>LightGBM computes precise baseline Probability of Default ($PD$) on HMDA mortgage data.</p>
                 </div>
-                
-                <div class="arch-line"></div>
-
-                <div class="arch-step">
-                    <div class="step-num">02</div>
-                    <div class="step-content">
-                        <h3>Qualitative Generative Engine</h3>
-                        <p>A QLoRA fine-tuned Mistral-7B analyzes the loan officer's narrative and synthesizes structured memorandums using the institutional <b>5 C's of Credit</b> framework.</p>
-                    </div>
+                <div class="card arch-card">
+                    <h3>02. Qualitative Generative Engine</h3>
+                    <p>QLoRA fine-tuned Mistral-7B analyzes loan officer notes and synthesizes 5 C's Credit Memorandums.</p>
                 </div>
-
-                <div class="arch-line"></div>
-
-                <div class="arch-step">
-                    <div class="step-num">03</div>
-                    <div class="step-content">
-                        <h3>Hybrid Meta-Learner</h3>
-                        <p>A Logistic Regression meta-model optimally fuses the probabilities of the tabular model and the LLM's classification to output a final, highly accurate default risk score.</p>
-                    </div>
+                <div class="card arch-card">
+                    <h3>03. Autonomous Multi-Agent Swarm</h3>
+                    <p>4-agent board (Quant, Macro, Compliance, CRO) debate credit limits in real-time.</p>
+                </div>
+                <div class="card arch-card">
+                    <h3>04. Vasicek Macro Stress Testing</h3>
+                    <p>Calculates conditional credit risk under Federal Reserve CCAR recession shocks.</p>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
