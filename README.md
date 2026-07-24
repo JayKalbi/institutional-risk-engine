@@ -44,40 +44,23 @@ Traditional commercial banking risk assessment suffers from a fundamental dichot
 ## ⚙️ System Architecture
 
 ```mermaid
-flowchart TB
-    subgraph ClientLayer["Frontend Application"]
-        UI["Multi-Page Web Portal<br/>(Glassmorphism SPA)"]
+flowchart TD
+    UI["💻 Frontend Web Portal (Multi-Page Glassmorphism SPA)"] -->|REST API POST| API["⚙️ Flask REST Microservice (Port 5000)"]
+
+    subgraph Engines["Quantitative & Compliance Engines"]
+        API --> QUANT["📊 LightGBM Risk Engine (PD & LGD Calculation)"]
+        API --> XAI["🔍 SHAP Explainer (Feature Attributions)"]
+        API --> MACRO["📈 Vasicek CCAR Stress Engine (Macro Recession Shocks)"]
+        API --> RAG["📜 Regulatory RAG Engine (CFPB Statutory Citations)"]
+        API --> SWARM["🤖 Multi-Agent Swarm Board (4 Autonomous Officers)"]
+        API --> DOC["📄 Document Intelligence (Income Fraud Audit)"]
     end
 
-    subgraph ServiceLayer["Flask REST Microservice (Port 5000)"]
-        API["API Router (/api)"]
-        QUANT["LightGBM Engine<br/>(PD & LGD Calculation)"]
-        XAI["SHAP Explainer<br/>(Feature Attributions)"]
-        MACRO["Vasicek Stress Engine<br/>(CCAR Scenario Shocks)"]
-        RAG["Regulatory RAG Engine<br/>(CFPB Statutory Citations)"]
-        SWARM["Multi-Agent Swarm Board<br/>(4 Autonomous Officers)"]
-        DOC["Document Intelligence<br/>(Income Fraud Audit)"]
+    subgraph InferenceRouter["Generative AI Inference Router"]
+        SWARM --> H100["🚀 H100 GPU Cluster (vLLM Port 8000)"]
+        SWARM --> GROQ["⚡ Groq Cloud API (Llama-3.3-70B)"]
+        SWARM --> FALLBACK["📑 Parameter-Infused RAG Fallback"]
     end
-
-    subgraph LLMLayer["Generative Inference Engine"]
-        H100["Local H100 Cluster<br/>(vLLM bfloat16 Port 8000)"]
-        GROQ["Groq Cloud API<br/>(Llama-3.3-70B)"]
-        FALLBACK["Parameter-Infused RAG Fallback"]
-    end
-
-    UI -->|REST POST| API
-    API --> QUANT
-    API --> XAI
-    API --> MACRO
-    API --> RAG
-    API --> SWARM
-    API --> DOC
-
-    SWARM --> LLMLayer
-    API --> LLMLayer
-    LLMLayer --> H100
-    LLMLayer --> GROQ
-    LLMLayer --> FALLBACK
 ```
 
 ---
@@ -185,11 +168,11 @@ $$\text{Disparate Impact Ratio} = \frac{\text{Approval Rate}_{\text{Protected Co
 
 ### VRAM Allocation Footprint Derivation (Mistral-7B BF16):
 
-$$7.24 \text{B Params} \times 2 \text{ bytes (BF16)} = 14.48 \text{ GB (Model Weights)}$$
-$$\text{LoRA } r=64 \text{ AdamW State} = 1.28 \text{ GB}$$
-$$\text{Activations (BS=16, Seq=4096)} = 22.00 \text{ GB}$$
-$$\text{CUDA Context & KV-Cache} = 4.00 \text{ GB}$$
-$$\mathbf{\text{Total Peak VRAM Requirement} \approx 44.50 \text{ GB}}$$
+* **Model Weights (BF16):** $7.24 \times 10^9 \text{ params} \times 2 \text{ bytes} = 14.48 \text{ GB}$
+* **LoRA $r=64$ AdamW State:** $160\text{M params} \times 8 \text{ bytes} = 1.28 \text{ GB}$
+* **Activations (Batch Size = 16, Sequence Length = 4096):** $22.00 \text{ GB}$
+* **CUDA Context and KV-Cache:** $4.00 \text{ GB}$
+* **Total Peak VRAM Requirement:** $\approx 44.50 \text{ GB}$
 
 * **Hardware Requirement:** **NVIDIA H100 (80GB HBM3 VRAM)** with $3.35\text{ TB/s}$ memory bandwidth.
 
@@ -230,14 +213,18 @@ institutional-risk-engine/
 ### 1. Local Windows Setup
 
 ```powershell
-# Clone repository
+# 1. Clone repository
 git clone https://github.com/JayKalbi/institutional-risk-engine.git
 cd institutional-risk-engine
 
-# Activate virtual environment
+# 2. Create & activate Python virtual environment
+python -m venv credit-risk-env
 .\credit-risk-env\Scripts\activate
 
-# Launch Flask application
+# 3. Install required dependencies
+pip install -r requirements-web.txt
+
+# 4. Launch Flask application
 python flask-app/app.py
 ```
 Open browser at `http://127.0.0.1:5000`.
